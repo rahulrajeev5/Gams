@@ -1,0 +1,224 @@
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  Scalar
+   2      budget,
+   3      priceCar,
+   4      priceTruck,
+   5      revenueCar,
+   6      revenueTruck,
+   7      barnSpaces,
+   8      truckSpaces;
+   9   
+INCLUDE    C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\input.inc
+  11  budget = 3.6;
+  12  priceCar = 1;
+  13  priceTruck = 1.2;
+  14  revenueCar = 2;
+  15  revenueTruck = 2.5;
+  16  barnSpaces = 4;
+  17  truckSpaces = 2;
+  18   
+  19  Integer Variables
+  20      x1 "number of cars",
+  21      x2 "number of trucks";
+  22   
+  23  Free Variable
+  24      z "total revenue";
+  25   
+  26  Equations
+  27      eq_revenue "revenue to be maximized",
+  28      eq_budget "stay within budget",
+  29      eq_carsinbarn "maximum number of cars in barn";
+  30   
+  31  eq_revenue..       z =e= revenueCar * x1 + revenueTruck * x2;
+  32  eq_budget..        priceCar * x1 + priceTruck * x2 =l= budget;
+  33  eq_carsinbarn..    x1 =l= barnSpaces - x2;
+  34   
+  35  x2.up = truckSpaces;
+  36   
+  37  Model vintage /all/;
+  38  Solve vintage using mip maximizing z;
+  39   
+  40  * Write results to CSV in backend folder
+  41  file results / '..\\GamsModels/result.csv' /;
+  42  put results;
+  43  put "car,", x1.l:0:0 /;
+  44  put "truck,", x2.l:0:0 /;
+  45  put "revenue,", z.l:0:0 /;
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\model.gms
+     2       10 INCLUDE        1      10  .C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\input.inc
+
+
+COMPILATION TIME     =        0.000 SECONDS      2 MB  49.6.0 20d51043 WEX-WEI
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE vintage Using MIP From line 38
+
+
+---- eq_revenue  =E=  revenue to be maximized
+
+eq_revenue..  - 2*x1 - 2.5*x2 + z =E= 0 ; (LHS = 0)
+     
+
+---- eq_budget  =L=  stay within budget
+
+eq_budget..  x1 + 1.2*x2 =L= 3.6 ; (LHS = 0)
+     
+
+---- eq_carsinbarn  =L=  maximum number of cars in barn
+
+eq_carsinbarn..  x1 + x2 =L= 4 ; (LHS = 0)
+     
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE vintage Using MIP From line 38
+
+
+---- x1  number of cars
+
+x1
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       eq_revenue
+        1       eq_budget
+        1       eq_carsinbarn
+
+
+---- x2  number of trucks
+
+x2
+                (.LO, .L, .UP, .M = 0, 0, 2, 0)
+       -2.5     eq_revenue
+        1.2     eq_budget
+        1       eq_carsinbarn
+
+
+---- z  total revenue
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       eq_revenue
+
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE vintage Using MIP From line 38
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 3.600E+00, 4.000E+00] - Zero values observed as well
+Bound     [min, max] : [ 2.000E+00, 2.000E+00] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 2.500E+00]
+
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE vintage Using MIP From line 38
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            3
+BLOCKS OF VARIABLES           3     SINGLE VARIABLES            3
+NON ZERO ELEMENTS             7     DISCRETE VARIABLES          2
+
+
+GENERATION TIME      =        0.016 SECONDS      3 MB  49.6.0 20d51043 WEX-WEI
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE vintage Using MIP From line 38
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   vintage             OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  38
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE                7.0000
+
+ RESOURCE USAGE, LIMIT          0.000 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+*** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.50 Mb (peak 0.50 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.2.0 link memory 0.00 Mb (peak 0.00 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+--- Returning a primal only solution to GAMS (marginals all set to NA).
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.00 ticks)
+
+
+Proven optimal solution
+MIP Solution:            7.000000    (0 iterations, 0 nodes)
+Final Solve:             7.000000    (0 iterations)
+
+Best possible:           7.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU eq_revenue          .              .              .             1.0000      
+---- EQU eq_budget         -INF            3.4000         3.6000          .          
+---- EQU eq_carsin~        -INF            3.0000         4.0000          .          
+
+  eq_revenue  revenue to be maximized
+  eq_budget  stay within budget
+  eq_carsinbarn  maximum number of cars in barn
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR x1                  .             1.0000        +INF            2.0000      
+---- VAR x2                  .             2.0000         2.0000         2.5000      
+---- VAR z                 -INF            7.0000        +INF             .          
+
+  x1  number of cars
+  x2  number of trucks
+  z  total revenue
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/27/25 20:49:32 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+**** REPORT FILE SUMMARY
+
+results C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\result.csv
+
+
+EXECUTION TIME       =        0.094 SECONDS      3 MB  49.6.0 20d51043 WEX-WEI
+
+
+USER: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
+      https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\model.gms
+Output     C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\model.lst

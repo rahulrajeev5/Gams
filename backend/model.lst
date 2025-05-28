@@ -1,0 +1,83 @@
+GAMS 49.6.0  20d51043 May 13, 2025          WEX-WEI x86 64bit/MS Windows - 05/28/25 02:39:11 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  Scalar
+   2      budget,
+   3      priceCar,
+   4      priceTruck,
+   5      revenueCar,
+   6      revenueTruck,
+   7      barnSpaces,
+   8      truckSpaces;
+   9   
+  10  $include ../GamsModels/input.inc
+****                                 $282
+**** 282  Unable to open include file
+****         Hint: Does the filename need to be quoted?
+  11   
+  12  Integer Variables
+  13      x1 "number of cars",
+  14      x2 "number of trucks";
+  15   
+  16  Free Variable
+  17      z "total revenue";
+  18   
+  19  Equations
+  20      eq_revenue "revenue to be maximized",
+  21      eq_budget "stay within budget",
+  22      eq_carsinbarn "maximum number of cars in barn";
+  23   
+  24  eq_revenue..       z =e= revenueCar * x1 + revenueTruck * x2;
+  25  eq_budget..        priceCar * x1 + priceTruck * x2 =l= budget;
+  26  eq_carsinbarn..    x1 =l= barnSpaces - x2;
+  27   
+  28  x2.up = truckSpaces;
+****                    $141
+**** 141  Symbol declared but no values have been assigned. Check for missing
+****         data definition, assignment, data loading or implicit assignment
+****         via a solve statement. Suppress with $onImplicitAssign.
+****         A wild shot: You may have spurious commas in the explanatory
+****         text of a declaration. Check symbol reference list.
+  29   
+  30  Model vintage /all/;
+  31  Solve vintage using mip maximizing z;
+****                                      $257
+**** 257  Solve statement not checked because of previous errors
+  32   
+  33  * Write results to CSV in backend folder
+  34  file results / '..\\GamsModels/result.csv' /;
+  35  put results;
+  36  put "car,", x1.l:0:0 /;
+****                 $141
+**** 141  Symbol declared but no values have been assigned. Check for missing
+****         data definition, assignment, data loading or implicit assignment
+****         via a solve statement. Suppress with $onImplicitAssign.
+****         A wild shot: You may have spurious commas in the explanatory
+****         text of a declaration. Check symbol reference list.
+  37  put "truck,", x2.l:0:0 /;
+  38  put "revenue,", z.l:0:0 /;
+****                    $141
+**** 141  Symbol declared but no values have been assigned. Check for missing
+****         data definition, assignment, data loading or implicit assignment
+****         via a solve statement. Suppress with $onImplicitAssign.
+****         A wild shot: You may have spurious commas in the explanatory
+****         text of a declaration. Check symbol reference list.
+
+**** 5 ERROR(S)   0 WARNING(S)
+
+
+COMPILATION TIME     =        0.000 SECONDS      2 MB  49.6.0 20d51043 WEX-WEI
+
+
+USER: GAMS Demo, for EULA and demo limitations see   G250131/0001CB-GEN
+      https://www.gams.com/latest/docs/UG%5FLicense.html         DC0000
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Rahul\OneDrive\Desktop\gams\backend\GamsModels\model.gms
+Output     C:\Users\Rahul\OneDrive\Desktop\gams\backend\model.lst
+
+**** USER ERROR(S) ENCOUNTERED
